@@ -1,0 +1,26 @@
+name: sdk-flutter publish to pub.dev
+
+# Tag-triggered (not workflow_dispatch) — pub.dev's own reusable publishing workflow requires a
+# tag push as the trust mechanism, matched against the tag pattern registered on
+# pub.dev/packages/tbbn_sdk/admin (Repository: AzaMoney/tbbn-sdk-flutter, Tag pattern:
+# v{{version}}). Uses GitHub OIDC, no stored token. This lives on the mirror (not the private
+# AzaMoney/tbbn) because dart-lang/setup-dart's reusable workflow can only check out a public
+# repository — see AzaMoney/tbbn's docs/architecture/sdk-publishing.md for why.
+#
+# To cut a new version: bump `version` in the main repo's packages/sdk-flutter/pubspec.yaml,
+# push to master (the mirror workflow there syncs this repo automatically), then tag *this* mirror
+# repo directly:
+#   git clone https://github.com/AzaMoney/tbbn-sdk-flutter /tmp/x
+#   cd /tmp/x && git tag v0.2.0 && git push origin v0.2.0
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  publish:
+    permissions:
+      id-token: write
+      contents: read
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1

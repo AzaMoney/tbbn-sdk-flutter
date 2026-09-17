@@ -1,0 +1,17 @@
+name: tbbn_sdk
+description: >
+  Client for the TBBN Platform API — publish listings, manage offers and trade sessions, and
+  verify webhooks from Dart and Flutter.
+version: 0.2.0
+homepage: https://tbbnetwork.com
+documentation: https://developer.tbbnetwork.com/merchant/docs/sdks
+issue_tracker: https://developer.tbbnetwork.com/community
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  http: ^1.2.0
+  crypto: ^3.0.3
+
+dev_dependencies:
+  lints: ^4.0.0
