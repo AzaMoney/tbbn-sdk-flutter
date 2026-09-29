@@ -122,20 +122,17 @@ class SellersResource {
   Future<dynamic> verify(Map<String, dynamic> input, {String? idempotencyKey}) =>
       _request('POST', '/merchant/sellers/verify', body: input, extraHeaders: idempotencyHeader(idempotencyKey));
 
-  /// Starts confirmation of a cross-merchant identity match.
-  Future<dynamic> requestLinkOtp(String linkRequestId) =>
-      _request('POST', '/v1/sellers/link/otp/request', body: {'linkRequestId': linkRequestId});
-
-  /// Confirms the email step of an identity-link request.
-  Future<dynamic> verifyEmail(String linkRequestId, String code) =>
-      _request('POST', '/v1/sellers/link/otp/verify-email', body: {'linkRequestId': linkRequestId, 'code': code});
-
-  /// Confirms the phone step of an identity-link request.
-  Future<dynamic> verifyPhone(String linkRequestId, String code) =>
-      _request('POST', '/v1/sellers/link/otp/verify-phone', body: {'linkRequestId': linkRequestId, 'code': code});
+  /// A trade participant your platform tracks without a TBBN account (Growth and above).
+  Future<dynamic> createHeadless(String merchantId, String merchantSellerRef, {String? name, String? idempotencyKey}) =>
+      _request('POST', '/merchant/sellers/headless',
+          body: {'merchantId': merchantId, 'merchantSellerRef': merchantSellerRef, if (name != null) 'name': name},
+          extraHeaders: idempotencyHeader(idempotencyKey));
 
   /// Fetches a seller by id.
   Future<dynamic> get(String id) => _request('GET', '/v1/sellers/$id');
+
+  /// Sellers linked to one of your merchants.
+  Future<dynamic> listForMerchant(String merchantId) => _request('GET', withQuery('/v1/sellers', {'merchantId': merchantId}));
 
   /// Removes the link between a seller and [merchantId].
   Future<dynamic> unlink(String id, String merchantId, {String? idempotencyKey}) =>

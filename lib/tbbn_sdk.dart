@@ -9,4 +9,5 @@ export 'src/resources_identity.dart';
 export 'src/resources_listings.dart';
 export 'src/resources_trading.dart';
 export 'src/resources_platform.dart';
+export 'src/resources_business.dart';
 export 'src/webhooks.dart' show verifyWebhookSignature;

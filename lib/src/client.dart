@@ -5,11 +5,10 @@ import 'resources_identity.dart';
 import 'resources_listings.dart';
 import 'resources_trading.dart';
 import 'resources_platform.dart';
+import 'resources_business.dart';
 
-/// Thrown for any non-2xx API response.
-///
-/// Mirrors the `{ "error": { "code", "message", "requestId" } }` envelope every TBBN endpoint
-/// returns on failure. Quote [requestId] when contacting support about a specific call.
+/// Thrown for any non-2xx API response. Quote [requestId] when contacting support about a
+/// specific call.
 class TbbnApiException implements Exception {
   /// HTTP status code of the failed response.
   final int status;
@@ -23,8 +22,31 @@ class TbbnApiException implements Exception {
   /// Server-side request identifier, when the response carried one.
   final String? requestId;
 
-  /// Creates an exception from the pieces of an API error envelope.
-  TbbnApiException(this.status, this.code, this.message, this.requestId);
+  /// Structured detail some errors carry — e.g. the matched terms when a listing is held by the
+  /// prohibited-items screen.
+  final dynamic details;
+
+  /// Creates an exception from the pieces of an API error.
+  TbbnApiException(this.status, this.code, this.message, this.requestId, [this.details]);
+
+  /// Reads either error shape the API returns: `{ "error": { "code", "message" } }` or a
+  /// service's own `{ "code", "message", "details" }` / `{ "statusCode", "message", "error" }`,
+  /// where `message` may be a list of validation messages.
+  factory TbbnApiException.fromBody(int status, String reason, dynamic body) {
+    final root = body is Map ? body : null;
+    final envelope = root != null && root['error'] is Map ? root['error'] as Map : root;
+    final raw = envelope?['message'];
+    final message = raw is List
+        ? raw.map((m) => m.toString()).join('; ')
+        : (raw is String && raw.isNotEmpty ? raw : reason);
+    final code = envelope?['code'] is String
+        ? envelope!['code'] as String
+        : (root?['error'] is String
+            ? (root!['error'] as String).trim().toUpperCase().split(RegExp(r'\s+')).join('_')
+            : 'UNKNOWN_ERROR');
+    final requestId = envelope?['requestId'] is String ? envelope!['requestId'] as String : null;
+    return TbbnApiException(status, code, message, requestId, envelope?['details']);
+  }
 
   @override
   String toString() => 'TbbnApiException($status, $code): $message';
@@ -72,8 +94,35 @@ class TbbnClient {
   /// Merchant API keys.
   late final ApiKeysResource apiKeys;
 
+  /// OAuth clients for seller account linking.
+  late final OAuthClientsResource oauthClients;
+
+  /// Seller account linking (OAuth 2.0).
+  late final OAuthLinkResource oauthLink;
+
   /// Sellers a merchant tracks, and their cross-merchant identity.
   late final SellersResource sellers;
+
+  /// Businesses — the account that owns locations, linked Merchants, billing and Space hosting.
+  late final BusinessesResource businesses;
+
+  /// A Business's locations.
+  late final BranchesResource branches;
+
+  /// Links between a Business and the Merchants it runs.
+  late final BusinessMerchantLinksResource businessMerchantLinks;
+
+  /// TBBN Space — search, booking terms and bookings.
+  late final SpaceResource space;
+
+  /// A scheduled catalog feed from your own feed URL.
+  late final MerchantFeedResource merchantFeed;
+
+  /// Reviews of merchants and Space locations.
+  late final ReviewsResource reviews;
+
+  /// Live platform status.
+  late final StatusResource status;
 
   /// A merchant's listings and the items each seller wants in return.
   late final ListingsResource listings;
@@ -151,8 +200,17 @@ class TbbnClient {
     auth = AuthResource(_request);
     merchants = MerchantsResource(_request);
     apiKeys = ApiKeysResource(_request);
+    oauthClients = OAuthClientsResource(_request);
+    oauthLink = OAuthLinkResource(_request);
     sellers = SellersResource(_request);
+    businesses = BusinessesResource(_request);
+    branches = BranchesResource(_request);
+    businessMerchantLinks = BusinessMerchantLinksResource(_request);
+    space = SpaceResource(_request);
     listings = ListingsResource(_request);
+    merchantFeed = MerchantFeedResource(_request);
+    reviews = ReviewsResource(_request);
+    status = StatusResource(_request);
     catalog = CatalogResource(_request);
     media = MediaResource(_request);
     directory = DirectoryResource(_request);
@@ -211,13 +269,7 @@ class TbbnClient {
     }
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      final error = (data is Map) ? data['error'] as Map<String, dynamic>? ?? {} : {};
-      throw TbbnApiException(
-        response.statusCode,
-        error['code'] as String? ?? 'UNKNOWN_ERROR',
-        error['message'] as String? ?? response.reasonPhrase ?? 'Unknown error',
-        error['requestId'] as String?,
-      );
+      throw TbbnApiException.fromBody(response.statusCode, response.reasonPhrase ?? 'HTTP ${response.statusCode}', data);
     }
 
     return data;

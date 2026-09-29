@@ -1,31 +1,59 @@
 import 'client.dart';
 
-/// Subscription billing and metered usage for a merchant's plan.
+/// TBBN's own plan and usage billing, per Business — never trade money. Every method takes a
+/// Business id.
 class BillingResource {
   final RequestFn _request;
 
   /// Creates the resource; you normally reach it as `client.billing`.
   BillingResource(this._request);
 
-  /// Starts a subscription.
+  /// Starts a plan (`businessId`, `billingEmail`, `tier`, optional `interval` MONTH/YEAR). A paid
+  /// plan returns a Stripe Checkout `checkoutUrl`.
   Future<dynamic> createSubscription(Map<String, dynamic> input) => _request('POST', '/v1/billing/subscriptions', body: input);
 
-  /// Fetches the subscription for [merchantId].
-  Future<dynamic> getSubscription(String merchantId) => _request('GET', '/v1/billing/subscriptions/$merchantId');
+  /// Fetches the Business's subscription.
+  Future<dynamic> getSubscription(String businessId) => _request('GET', '/v1/billing/subscriptions/$businessId');
+
+  /// Whether service is paused (unpaid invoice or a usage balance below zero).
+  Future<dynamic> suspension(String businessId) => _request('GET', '/v1/billing/subscriptions/$businessId/suspension');
+
+  /// Upgrade (charged now) or downgrade (at period end); [interval] is MONTH or YEAR.
+  Future<dynamic> changePlan(String businessId, String tier, {String? interval}) =>
+      _request('POST', '/v1/billing/subscriptions/$businessId/change-plan', body: {'tier': tier, 'interval': interval});
 
   /// Moves the subscription to a different plan tier.
-  Future<dynamic> changeTier(String merchantId, String tier) =>
-      _request('POST', '/v1/billing/subscriptions/$merchantId/change-tier', body: {'tier': tier});
+  Future<dynamic> changeTier(String businessId, String tier) =>
+      _request('POST', '/v1/billing/subscriptions/$businessId/change-tier', body: {'tier': tier});
 
   /// Cancels the subscription at the end of the current period.
-  Future<dynamic> cancelSubscription(String merchantId) => _request('POST', '/v1/billing/subscriptions/$merchantId/cancel');
+  Future<dynamic> cancelSubscription(String businessId) => _request('POST', '/v1/billing/subscriptions/$businessId/cancel');
+
+  /// Applies a finished Stripe Checkout (plan, top-up or card). Safe to call twice.
+  Future<dynamic> completeCheckout(String sessionId) =>
+      _request('POST', '/v1/billing/checkout/complete', body: {'sessionId': sessionId});
+
+  /// The usage balance, alarms, and this allowance window's usage per service.
+  Future<dynamic> wallet(String businessId) => _request('GET', '/v1/billing/wallet/$businessId');
+
+  /// Adds to the usage balance (stays on the same plan). Returns a Checkout URL.
+  Future<dynamic> topUp(String businessId, num amountUsd) =>
+      _request('POST', '/v1/billing/wallet/$businessId/top-up', body: {'amountUsd': amountUsd});
 
   /// Records a usage event.
   Future<dynamic> recordUsage(Map<String, dynamic> input) => _request('POST', '/v1/billing/usage', body: input);
 
   /// Summarises usage for a billing period (defaults to the current one).
-  Future<dynamic> usageSummary(String merchantId, {String? billingPeriodRef}) =>
-      _request('GET', withQuery('/v1/billing/usage/$merchantId', {'billingPeriodRef': billingPeriodRef}));
+  Future<dynamic> usageSummary(String businessId, {String? billingPeriodRef}) =>
+      _request('GET', withQuery('/v1/billing/usage/$businessId', {'billingPeriodRef': billingPeriodRef}));
+
+  /// Where usage went — [groupBy] is day, merchant or eventType.
+  Future<dynamic> usageBreakdown(String businessId, {String? from, String? to, String? groupBy}) =>
+      _request('GET', withQuery('/v1/billing/usage/$businessId/breakdown', {'from': from, 'to': to, 'groupBy': groupBy}));
+
+  /// The Business's statement: plan charges owed and Space earnings paid out, kept separate.
+  Future<dynamic> statement(String businessId, {String? billingPeriodRef}) =>
+      _request('GET', withQuery('/v1/billing/statements/$businessId', {'billingPeriodRef': billingPeriodRef}));
 }
 
 /// In-app notifications.
@@ -57,16 +85,34 @@ class WebhooksResource {
   Future<dynamic> listSubscriptions(String merchantId) =>
       _request('GET', withQuery('/v1/webhooks/subscriptions', {'merchantId': merchantId}));
 
-  /// Disables a subscription without deleting its delivery history.
-  Future<dynamic> disableSubscription(String id, String merchantId) =>
-      _request('POST', '/v1/webhooks/subscriptions/$id/disable', body: {'merchantId': merchantId});
+  /// Disables a subscription without deleting its delivery history. Ownership comes from your
+  /// credential.
+  Future<dynamic> disableSubscription(String id) => _request('POST', '/v1/webhooks/subscriptions/$id/disable');
 
-  /// Lists delivery attempts, optionally for one subscription.
-  Future<dynamic> listDeliveries({String? subscriptionId}) =>
+  /// Lists delivery attempts for one of your subscriptions.
+  Future<dynamic> listDeliveries(String subscriptionId) =>
       _request('GET', withQuery('/v1/webhooks/deliveries', {'subscriptionId': subscriptionId}));
 
   /// Re-sends a delivery.
   Future<dynamic> replayDelivery(String id) => _request('POST', '/v1/webhooks/deliveries/$id/replay');
+
+  /// Subscribes a Business (TBBN Space) endpoint to booking lifecycle events. ADMIN or DEVELOPER role.
+  Future<dynamic> createBusinessSubscription(String businessId, String url, List<String> events) =>
+      _request('POST', '/v1/webhooks/business-subscriptions', body: {'businessId': businessId, 'url': url, 'events': events});
+
+  /// Lists a Business's webhook subscriptions.
+  Future<dynamic> listBusinessSubscriptions(String businessId) =>
+      _request('GET', withQuery('/v1/webhooks/business-subscriptions', {'businessId': businessId}));
+
+  /// Disables a Business webhook subscription.
+  Future<dynamic> disableBusinessSubscription(String id) => _request('POST', '/v1/webhooks/business-subscriptions/$id/disable');
+
+  /// Lists delivery attempts for a Business webhook subscription.
+  Future<dynamic> listBusinessDeliveries(String subscriptionId) =>
+      _request('GET', withQuery('/v1/webhooks/business-deliveries', {'subscriptionId': subscriptionId}));
+
+  /// Re-sends a Business webhook delivery.
+  Future<dynamic> replayBusinessDelivery(String id) => _request('POST', '/v1/webhooks/business-deliveries/$id/replay');
 }
 
 /// The audit trail of changes made through the API.

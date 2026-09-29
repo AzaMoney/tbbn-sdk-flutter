@@ -124,6 +124,38 @@ class TradeSessionsResource {
   /// Cancels a trade session.
   Future<dynamic> cancel(String id, String actingSellerId, {String? reason}) =>
       _request('POST', '/v1/trade-sessions/$id/cancel', body: {'actingSellerId': actingSellerId, 'reason': reason});
+
+  /// The paid side closes a trade the other side never completed, once the hold has elapsed.
+  Future<dynamic> closeUnreciprocated(String id, String actingSellerId, String note) =>
+      _request('POST', '/v1/trade-sessions/$id/close-unreciprocated', body: {'actingSellerId': actingSellerId, 'note': note});
+
+  /// Peer-to-peer completion: either party confirms the exchange happened.
+  Future<dynamic> confirmScheduling(String id, String actingSellerId, {String? confirmedByMerchantUserId}) =>
+      _request('POST', '/v1/trade-sessions/$id/scheduling/confirm',
+          body: {'actingSellerId': actingSellerId, 'confirmedByMerchantUserId': confirmedByMerchantUserId});
+
+  /// Reports that a peer-to-peer exchange didn't happen.
+  Future<dynamic> failScheduling(String id, String actingSellerId, {String? reason}) =>
+      _request('POST', '/v1/trade-sessions/$id/scheduling/fail', body: {'actingSellerId': actingSellerId, 'reason': reason});
+
+  /// Excuses the paid side from fulfilling once the counterparty hold has elapsed.
+  Future<dynamic> excuseFulfillment(String id, String note) =>
+      _request('POST', '/v1/trade-sessions/$id/excuse-fulfillment', body: {'note': note});
+
+  /// Records that your side agreed to the trade's hold terms before checkout.
+  Future<dynamic> acknowledgeHoldTerms(String id, {String? actingSellerId}) =>
+      _request('POST', '/v1/trade-sessions/$id/acknowledge-hold-terms', body: {'actingSellerId': actingSellerId});
+
+  /// Suggests a TBBN Space location for the exchange; the other side accepts it.
+  Future<dynamic> proposeSpace(String id, String branchId, {String? actingSellerId}) =>
+      _request('POST', '/v1/trade-sessions/$id/space-proposals', body: {'branchId': branchId, 'actingSellerId': actingSellerId});
+
+  /// Lists the Space proposals on a trade session.
+  Future<dynamic> listSpaceProposals(String id) => _request('GET', '/v1/trade-sessions/$id/space-proposals');
+
+  /// Accepts a Space proposal.
+  Future<dynamic> acceptSpaceProposal(String id, String proposalId, {String? actingSellerId}) =>
+      _request('POST', '/v1/trade-sessions/$id/space-proposals/$proposalId/accept', body: {'actingSellerId': actingSellerId});
 }
 
 /// Checkout reporting. Each side of a trade pays on its own merchant's checkout; the merchant
