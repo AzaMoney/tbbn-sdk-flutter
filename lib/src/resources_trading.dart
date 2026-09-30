@@ -148,6 +148,11 @@ class TradeSessionsResource {
       _request('POST', '/v1/trade-sessions/$id/external-settlement',
           body: {'side': side, 'outcome': outcome, if (reason != null) 'reason': reason});
 
+  /// Extends a matching-only side's report deadline once, by 1–14 days, before it passes.
+  Future<dynamic> extendExternalSettlement(String id, String side, int days, String reason) =>
+      _request('POST', '/v1/trade-sessions/$id/external-settlement/extend',
+          body: {'side': side, 'days': days, 'reason': reason});
+
   /// Records that your side agreed to the trade's hold terms before checkout.
   Future<dynamic> acknowledgeHoldTerms(String id, {String? actingSellerId}) =>
       _request('POST', '/v1/trade-sessions/$id/acknowledge-hold-terms', body: {'actingSellerId': actingSellerId});

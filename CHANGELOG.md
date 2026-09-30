@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `tradeSessions.extendExternalSettlement(id, side, days, reason)` — extend a matching-only side's report deadline once, by up to 14 days.
 - Added `tradeSessions.reportExternalSettlement(id, side, outcome, reason: ...)` — a side whose merchant runs its own checkout reports how it settled (`completed`, or `failed` with a reason).
 
 ## 0.3.0 — 2026-09-29
