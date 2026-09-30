@@ -172,8 +172,6 @@ class TbbnClient {
   /// Outbound webhook subscriptions and deliveries.
   late final WebhooksResource webhooks;
 
-  /// The audit trail.
-  late final AuditLogsResource auditLogs;
 
   /// Content-moderation flags.
   late final ModerationResource moderation;
@@ -226,7 +224,6 @@ class TbbnClient {
     billing = BillingResource(_request);
     notifications = NotificationsResource(_request);
     webhooks = WebhooksResource(_request);
-    auditLogs = AuditLogsResource(_request);
     moderation = ModerationResource(_request);
     fraud = FraudResource(_request);
     reputation = ReputationResource(_request);

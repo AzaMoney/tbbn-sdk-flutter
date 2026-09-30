@@ -115,17 +115,6 @@ class WebhooksResource {
   Future<dynamic> replayBusinessDelivery(String id) => _request('POST', '/v1/webhooks/business-deliveries/$id/replay');
 }
 
-/// The audit trail of changes made through the API.
-class AuditLogsResource {
-  final RequestFn _request;
-
-  /// Creates the resource; you normally reach it as `client.auditLogs`.
-  AuditLogsResource(this._request);
-
-  /// Lists audit entries, filtered by the optional [query] parameters.
-  Future<dynamic> list([Map<String, dynamic>? query]) => _request('GET', withQuery('/v1/audit-logs', query ?? {}));
-}
-
 /// Content-moderation flags raised on listings and messages.
 class ModerationResource {
   final RequestFn _request;
