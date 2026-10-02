@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added `merchants.removeUser(id, userId)` — removes someone from the Merchant team (not the owner).
+- Merchant team roles are now `ADMIN`, `DEVELOPER`, `ACCOUNT_MANAGER`, `OPERATIONS`, `ACCOUNTANT`, `SUPPORT` and `VIEWER` for `merchants.inviteUser` and `changeRole`; `OWNER` can't be assigned.
+- `tradeSessions.proposeSpace(id, null, spaceId: ..., acceptTerms: true, scheduledAt: ...)` proposes a Space to meet at; when the other trader accepts, it's booked in your name and you pay for it. A `branchId` alone still proposes a location only. `acceptSpaceProposal` returns `{ proposal, booking }`, and only the other trader can accept.
 - Removed the audit-log resource — the audit trail is no longer part of the public API.
 - Added `tradeSessions.extendExternalSettlement(id, side, days, reason)` — extend a matching-only side's report deadline once, by up to 14 days.
 - Added `tradeSessions.reportExternalSettlement(id, side, outcome, reason: ...)` — a side whose merchant runs its own checkout reports how it settled (`completed`, or `failed` with a reason).

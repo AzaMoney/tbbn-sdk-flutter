@@ -157,9 +157,23 @@ class TradeSessionsResource {
   Future<dynamic> acknowledgeHoldTerms(String id, {String? actingSellerId}) =>
       _request('POST', '/v1/trade-sessions/$id/acknowledge-hold-terms', body: {'actingSellerId': actingSellerId});
 
-  /// Suggests a TBBN Space location for the exchange; the other side accepts it.
-  Future<dynamic> proposeSpace(String id, String branchId, {String? actingSellerId}) =>
-      _request('POST', '/v1/trade-sessions/$id/space-proposals', body: {'branchId': branchId, 'actingSellerId': actingSellerId});
+  /// Proposes a meeting place. With [spaceId] and [acceptTerms] true, the Space is booked in your
+  /// name (you pay for it) when the other trader accepts; a [branchId] alone proposes a location.
+  Future<dynamic> proposeSpace(
+    String id,
+    String? branchId, {
+    String? actingSellerId,
+    String? spaceId,
+    String? scheduledAt,
+    bool? acceptTerms,
+  }) =>
+      _request('POST', '/v1/trade-sessions/$id/space-proposals', body: {
+        'branchId': branchId,
+        'spaceId': spaceId,
+        'scheduledAt': scheduledAt,
+        'acceptTerms': acceptTerms,
+        'actingSellerId': actingSellerId,
+      });
 
   /// Lists the Space proposals on a trade session.
   Future<dynamic> listSpaceProposals(String id) => _request('GET', '/v1/trade-sessions/$id/space-proposals');

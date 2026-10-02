@@ -81,6 +81,10 @@ class MerchantsResource {
         body: {'role': role},
         extraHeaders: idempotencyHeader(idempotencyKey),
       );
+
+  /// Removes someone from the Merchant team. The owner can't be removed.
+  Future<dynamic> removeUser(String id, String userId) =>
+      _request('DELETE', '/v1/merchants/$id/users/$userId');
 }
 
 /// Merchant API keys. The full key is returned exactly once, at creation or rotation.
