@@ -175,6 +175,10 @@ class TradeSessionsResource {
         'actingSellerId': actingSellerId,
       });
 
+  /// Declines the other trader's meeting-place proposal. Nothing is booked.
+  Future<dynamic> declineSpaceProposal(String id, String proposalId, {String? actingSellerId}) =>
+      _request('POST', '/v1/trade-sessions/$id/space-proposals/$proposalId/decline', body: {'actingSellerId': actingSellerId});
+
   /// Lists the Space proposals on a trade session.
   Future<dynamic> listSpaceProposals(String id) => _request('GET', '/v1/trade-sessions/$id/space-proposals');
 
