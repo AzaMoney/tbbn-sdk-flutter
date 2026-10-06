@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Removed `sandbox.provisionMerchant`: anonymous sandbox keys are gone. Test keys (`sk_sandbox_`) now come from the merchant dashboard in Test mode and work only on the Merchant's test account; a test key made before 2026-10-06 returns 401 `SANDBOX_KEY_RETIRED`. `sandbox.fixtures` is unchanged.
 - Added `tradeSessions.declineSpaceProposal(id, proposalId, actingSellerId: ...)`.
 - Added `merchants.removeUser(id, userId)` — removes someone from the Merchant team (not the owner).
 - Merchant team roles are now `ADMIN`, `DEVELOPER`, `ACCOUNT_MANAGER`, `OPERATIONS`, `ACCOUNTANT`, `SUPPORT` and `VIEWER` for `merchants.inviteUser` and `changeRole`; `OWNER` can't be assigned.

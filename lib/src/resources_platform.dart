@@ -191,10 +191,6 @@ class SandboxResource {
   /// Creates the resource; you normally reach it as `client.sandbox`.
   SandboxResource(this._request);
 
-  /// Provisions a throwaway sandbox merchant.
-  Future<dynamic> provisionMerchant({String? displayName}) =>
-      _request('POST', '/v1/sandbox/merchants', body: {'displayName': displayName});
-
   /// Returns fixture data you can trade against in the sandbox.
   Future<dynamic> fixtures() => _request('GET', '/v1/sandbox/fixtures');
 }
