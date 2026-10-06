@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Space API test mode: bookings made with a test key (`sk_space_sandbox_`) are now test bookings (`livemode: false`) — never charged, nobody notified; their links open a test page where consent and payment are simulated. No method changes.
 - Removed `sandbox.provisionMerchant`: anonymous sandbox keys are gone. Test keys (`sk_sandbox_`) now come from the merchant dashboard in Test mode and work only on the Merchant's test account; a test key made before 2026-10-06 returns 401 `SANDBOX_KEY_RETIRED`. `sandbox.fixtures` is unchanged.
 - Added `tradeSessions.declineSpaceProposal(id, proposalId, actingSellerId: ...)`.
 - Added `merchants.removeUser(id, userId)` — removes someone from the Merchant team (not the owner).
