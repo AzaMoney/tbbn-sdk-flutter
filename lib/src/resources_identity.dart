@@ -85,6 +85,12 @@ class MerchantsResource {
   /// Removes someone from the Merchant team. The owner can't be removed.
   Future<dynamic> removeUser(String id, String userId) =>
       _request('DELETE', '/v1/merchants/$id/users/$userId');
+
+  /// The team's invitations waiting for an answer. inviteUser sends one; the person joins when they accept it.
+  Future<dynamic> listInvitations(String id) => _request('GET', '/v1/merchants/$id/invitations');
+
+  Future<dynamic> revokeInvitation(String id, String invitationId) =>
+      _request('DELETE', '/v1/merchants/$id/invitations/$invitationId');
 }
 
 /// Merchant API keys. The full key is returned exactly once, at creation or rotation.

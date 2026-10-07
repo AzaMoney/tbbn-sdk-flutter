@@ -24,6 +24,9 @@ class BusinessesResource {
 
   /// The Business's team and their roles.
   Future<dynamic> listUsers(String businessId) => _request('GET', '/v1/businesses/$businessId/business-users');
+
+  /// The team's invitations waiting for an answer.
+  Future<dynamic> listInvitations(String businessId) => _request('GET', '/v1/businesses/$businessId/invitations');
 }
 
 /// A Business's locations.
