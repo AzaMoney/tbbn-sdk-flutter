@@ -104,6 +104,9 @@ class SpaceResource {
   /// Lists bookings (by `branchId`, `spaceId`, `bookedByUserId` or `bookedByBusinessId`).
   Future<dynamic> listBookings(Map<String, dynamic> query) => _request('GET', withQuery('/v1/space/bookings', query));
 
+  /// A location's spot board: who should be in each spot now, who's next, who's arriving.
+  Future<dynamic> spotBoard(String branchId) => _request('GET', '/v1/space/branches/$branchId/spot-board');
+
   /// The amount to pay and how.
   Future<dynamic> paymentInfo(String bookingId, {String? token}) =>
       _request('GET', withQuery('/v1/space/bookings/$bookingId/payment-info', {'token': token}));
