@@ -63,6 +63,9 @@ class MerchantsResource {
   /// Returns the review status of the merchant's application.
   Future<dynamic> applicationStatus(String id) => _request('GET', '/v1/merchants/$id/application-status');
 
+  /// Every commission rate the merchant has set, newest first.
+  Future<dynamic> commissionRates(String id) => _request('GET', '/v1/merchants/$id/commission-rates');
+
   /// Invites a team member to the merchant with the given role.
   Future<dynamic> inviteUser(String id, String email, String role, {String? idempotencyKey}) => _request(
         'POST',

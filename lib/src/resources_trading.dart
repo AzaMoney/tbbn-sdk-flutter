@@ -82,7 +82,11 @@ class OffersResource {
   /// Creates the resource; you normally reach it as `client.offers`.
   OffersResource(this._request);
 
-  /// Creates an offer.
+  /// The trade quote for these items — what each trader pays at which store. Show it, then
+  /// pass its fingerprint to [create].
+  Future<dynamic> quote(Map<String, dynamic> input) => _request('POST', '/v1/offers/quote', body: input);
+
+  /// Creates an offer. [input] must include quoteFingerprint — the quote the sender was shown.
   Future<dynamic> create(Map<String, dynamic> input) => _request('POST', '/v1/offers', body: input);
 
   /// Lists a seller's offers. [direction] is `sent`, `received` or `all`.
@@ -92,9 +96,19 @@ class OffersResource {
   /// Fetches an offer by id.
   Future<dynamic> get(String id) => _request('GET', '/v1/offers/$id');
 
-  /// Accepts an offer, which opens a trade session.
-  Future<dynamic> accept(String id, String actingSellerId) =>
-      _request('POST', '/v1/offers/$id/accept', body: {'actingSellerId': actingSellerId});
+  /// An offer's quote (locked once accepted) and whether each party has confirmed it.
+  Future<dynamic> getQuote(String id) => _request('GET', '/v1/offers/$id/quote');
+
+  /// Confirms the offer's current quote — e.g. the sender again after it changed.
+  Future<dynamic> acknowledgeQuote(String id, String quoteFingerprint, {String? actingSellerId}) =>
+      _request('POST', '/v1/offers/$id/quote/acknowledge',
+          body: {'actingSellerId': actingSellerId, 'quoteFingerprint': quoteFingerprint});
+
+  /// Accepts an offer, confirming the quote the recipient was shown and locking it; a trade
+  /// session follows.
+  Future<dynamic> accept(String id, String actingSellerId, String quoteFingerprint) =>
+      _request('POST', '/v1/offers/$id/accept',
+          body: {'actingSellerId': actingSellerId, 'quoteFingerprint': quoteFingerprint});
 
   /// Rejects an offer.
   Future<dynamic> reject(String id, String actingSellerId) =>
