@@ -118,6 +118,10 @@ class TradeSessionsResource {
   /// Lists a seller's trade sessions.
   Future<dynamic> list(String sellerId) => _request('GET', withQuery('/v1/trade-sessions', {'sellerId': sellerId}));
 
+  /// Your Merchant's trade records for your books (ISO dates; default the last 90 days).
+  Future<dynamic> records({String? from, String? to}) =>
+      _request('GET', withQuery('/v1/trade-sessions/records', {'from': from, 'to': to}));
+
   /// Fetches a trade session by id.
   Future<dynamic> get(String id) => _request('GET', '/v1/trade-sessions/$id');
 

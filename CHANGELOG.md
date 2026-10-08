@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `tradeSessions.records(from:, to:)`: your Merchant's trade records for your books — per trade and side, each item's terms as traded, both sides' values, what each trader paid and when (`GET /v1/trade-sessions/records`). Merchant listings no longer need a seller id (`sellerRef` instead, or none for your store's own item).
+
 - `merchants.inviteUser` now sends an invitation the person accepts (they join when they do). Added `merchants.listInvitations`, `merchants.revokeInvitation` and `businesses.listInvitations`.
 
 - Space API test mode: bookings made with a test key (`sk_space_sandbox_`) are now test bookings (`livemode: false`) — never charged, nobody notified; their links open a test page where consent and payment are simulated. No method changes.
