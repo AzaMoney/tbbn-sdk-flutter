@@ -23,6 +23,10 @@ class ListingsResource {
   Future<dynamic> updateAvailability(String id, String status) =>
       _request('POST', '/merchant/listings/$id/availability', body: {'status': status});
 
+  /// Your own catalogue, every status but deleted, newest first (`{data, nextCursor, counts}`).
+  Future<dynamic> listOwn([Map<String, dynamic> query = const {}]) =>
+      _request('GET', withQuery('/merchant/listings', query));
+
   /// Replaces the set of items the seller wants in exchange for this listing.
   Future<dynamic> replaceWants(String id, List<Map<String, dynamic>> wants) =>
       _request('PUT', '/merchant/listings/$id/wants', body: {'wants': wants});
