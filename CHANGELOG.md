@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `webhooks.updateSubscription(id, input)`: rename a webhook, move it to a new address or change its events — the signing secret is kept. `createSubscription` takes an optional `name`, your own label for the endpoint. A webhook address must now be public https; deliveries carry `X-TBBN-Webhook-Id` and `X-TBBN-Delivery-Id` headers.
+
 - Added `tradeSessions.records(from:, to:)`: your Merchant's trade records for your books — per trade and side, each item's terms as traded, both sides' values, what each trader paid and when (`GET /v1/trade-sessions/records`). Merchant listings no longer need a seller id (`sellerRef` instead, or none for your store's own item).
 
 - `merchants.inviteUser` now sends an invitation the person accepts (they join when they do). Added `merchants.listInvitations`, `merchants.revokeInvitation` and `businesses.listInvitations`.

@@ -85,6 +85,11 @@ class WebhooksResource {
   Future<dynamic> listSubscriptions(String merchantId) =>
       _request('GET', withQuery('/v1/webhooks/subscriptions', {'merchantId': merchantId}));
 
+  /// Renames a subscription ('name'), moves it ('url') or changes its 'events'. The signing
+  /// secret is kept.
+  Future<dynamic> updateSubscription(String id, Map<String, dynamic> input) =>
+      _request('PATCH', '/v1/webhooks/subscriptions/$id', body: input);
+
   /// Disables a subscription without deleting its delivery history. Ownership comes from your
   /// credential.
   Future<dynamic> disableSubscription(String id) => _request('POST', '/v1/webhooks/subscriptions/$id/disable');
