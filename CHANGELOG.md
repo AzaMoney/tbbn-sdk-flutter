@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `space.availability(spaceId, query)`: a Space's bookable slots, each with spots left or why it can't be booked. A booking at a Space with hours and a booking length must start on an `AVAILABLE` slot; otherwise it's refused with `NOT_A_BOOKING_TIME`, `SLOT_FULL`, `SLOT_BLOCKED`, `SLOT_TOO_SOON`, `SLOT_TOO_FAR` or `SLOT_PAST` and `details.nextAvailable`. Added `billing.merchantSummary()`: your Merchant's plan (its Business's) and this period's usage.
+
 - Added `webhooks.updateSubscription(id, input)`: rename a webhook, move it to a new address or change its events — the signing secret is kept. `createSubscription` takes an optional `name`, your own label for the endpoint. A webhook address must now be public https; deliveries carry `X-TBBN-Webhook-Id` and `X-TBBN-Delivery-Id` headers.
 
 - Added `tradeSessions.records(from:, to:)`: your Merchant's trade records for your books — per trade and side, each item's terms as traded, both sides' values, what each trader paid and when (`GET /v1/trade-sessions/records`). Merchant listings no longer need a seller id (`sellerRef` instead, or none for your store's own item).

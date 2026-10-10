@@ -98,6 +98,11 @@ class SpaceResource {
   /// The refund and no-show policy, processing fee and terms a guest agrees to.
   Future<dynamic> bookingTerms(String spaceId) => _request('GET', '/v1/space/spaces/$spaceId/booking-terms');
 
+  /// Bookable slots ('from': YYYY-MM-DD in the Space's time zone, 'days': up to 62). A booking
+  /// must start on an AVAILABLE slot.
+  Future<dynamic> availability(String spaceId, [Map<String, dynamic> query = const {}]) =>
+      _request('GET', withQuery('/v1/space/spaces/$spaceId/availability', query));
+
   /// Books a Space. A member booking must include `acceptTerms: true`.
   Future<dynamic> createBooking(Map<String, dynamic> input) => _request('POST', '/v1/space/bookings', body: input);
 

@@ -43,6 +43,9 @@ class BillingResource {
   /// Records a usage event.
   Future<dynamic> recordUsage(Map<String, dynamic> input) => _request('POST', '/v1/billing/usage', body: input);
 
+  /// Your Merchant's plan (its Business's) and this period's usage: your own count of each service beside the Business's total and the plan's allowance.
+  Future<dynamic> merchantSummary() => _request('GET', '/v1/billing/merchant/summary');
+
   /// Summarises usage for a billing period (defaults to the current one).
   Future<dynamic> usageSummary(String businessId, {String? billingPeriodRef}) =>
       _request('GET', withQuery('/v1/billing/usage/$businessId', {'billingPeriodRef': billingPeriodRef}));
