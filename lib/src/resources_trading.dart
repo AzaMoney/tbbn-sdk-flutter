@@ -40,6 +40,9 @@ class LocalizationResource {
   /// Lists supported languages.
   Future<dynamic> languages() => _request('GET', '/v1/localization/languages');
 
+  /// Where the caller's connection seems to be: country, and region and city when known.
+  Future<dynamic> locate() => _request('GET', '/v1/localization/locate');
+
   /// Normalises a phone number to E.164.
   Future<dynamic> normalizePhone(String phone) => _request('POST', '/v1/localization/normalize-phone', body: {'phone': phone});
 }
