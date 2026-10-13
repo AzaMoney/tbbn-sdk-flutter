@@ -141,6 +141,12 @@ class SellersResource {
           body: {'merchantId': merchantId, 'merchantSellerRef': merchantSellerRef, if (name != null) 'name': name},
           extraHeaders: idempotencyHeader(idempotencyKey));
 
+  /// Redeem a customer's TBBN link code, naming your own reference for them (optional).
+  Future<dynamic> redeemLinkCode(String code, {String? merchantSellerRef, String? idempotencyKey}) =>
+      _request('POST', '/merchant/sellers/link-code',
+          body: {'code': code, if (merchantSellerRef != null) 'merchant_seller_ref': merchantSellerRef},
+          extraHeaders: idempotencyHeader(idempotencyKey));
+
   /// Fetches a seller by id.
   Future<dynamic> get(String id) => _request('GET', '/v1/sellers/$id');
 
