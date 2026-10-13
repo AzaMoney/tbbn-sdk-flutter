@@ -83,6 +83,10 @@ class DirectoryResource {
 
   /// Fetches one directory entry.
   Future<dynamic> get(String id) => _request('GET', '/v1/directory/listings/$id');
+
+  /// A member's public storefront: their profile and their own public listings.
+  Future<dynamic> storefront(String slug, {int page = 1}) =>
+      _request('GET', '/v1/directory/storefronts/$slug?page=$page');
 }
 
 /// Listing search.
