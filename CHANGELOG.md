@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Swap offers must be worth at least half the listed price of what they ask for; otherwise creating one is refused with `OFFER_BELOW_HALF_VALUE` (details: `required`, `offered`, `shortfall`). Offer create, counter and quote inputs take `cashIncluded` — cash included as part of the difference the sender pays — and the quote returns `coverage` and `maxCashIncluded`.
+
 - Added `space.availability(spaceId, query)`: a Space's bookable slots, each with spots left or why it can't be booked. A booking at a Space with hours and a booking length must start on an `AVAILABLE` slot; otherwise it's refused with `NOT_A_BOOKING_TIME`, `SLOT_FULL`, `SLOT_BLOCKED`, `SLOT_TOO_SOON`, `SLOT_TOO_FAR` or `SLOT_PAST` and `details.nextAvailable`. Added `billing.merchantSummary()`: your Merchant's plan (its Business's) and this period's usage.
 
 - Added `webhooks.updateSubscription(id, input)`: rename a webhook, move it to a new address or change its events — the signing secret is kept. `createSubscription` takes an optional `name`, your own label for the endpoint. A webhook address must now be public https; deliveries carry `X-TBBN-Webhook-Id` and `X-TBBN-Delivery-Id` headers.
