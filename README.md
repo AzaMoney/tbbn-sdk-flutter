@@ -14,7 +14,7 @@ built on `package:http`.
 
 ```yaml
 dependencies:
-  tbbn_sdk: ^0.2.0
+  tbbn_sdk: ^0.4.0
 ```
 
 ## Quick start

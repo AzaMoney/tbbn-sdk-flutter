@@ -32,7 +32,7 @@ class ListingsResource {
       _request('PUT', '/merchant/listings/$id/wants', body: {'wants': wants});
 
   /// Returns the seller's wants for this listing.
-  Future<dynamic> getWants(String id) => _request('GET', '/merchant/listings/$id/wants');
+  Future<dynamic> getWants(String id) => _request('GET', '/v1/listings/$id/wants');
 
   /// Fetches a listing by id.
   Future<dynamic> get(String id) => _request('GET', '/v1/listings/$id');

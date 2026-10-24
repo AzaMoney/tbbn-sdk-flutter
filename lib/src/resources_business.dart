@@ -72,6 +72,10 @@ class BusinessMerchantLinksResource {
   /// Lists a Business's linked Merchants.
   Future<dynamic> listForBusiness(String businessId) => _request('GET', '/v1/businesses/$businessId/merchant-links');
 
+  /// The Businesses a Merchant is linked to (your own Merchant id with an API key).
+  Future<dynamic> listForMerchant(String merchantId) =>
+      _request('GET', withQuery('/v1/business-merchant-links', {'merchantId': merchantId}));
+
   /// Removes a link.
   Future<dynamic> revoke(String businessId, String linkId) =>
       _request('POST', '/v1/businesses/$businessId/merchant-links/$linkId/revoke');

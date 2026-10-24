@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -240,21 +241,23 @@ class TbbnClient {
     final uri = Uri.parse('$baseUrl$path');
     final encodedBody = body != null ? jsonEncode(body) : null;
 
-    late http.Response response;
+    final Future<http.Response> pending;
     switch (method) {
       case 'GET':
-        response = await _http.get(uri, headers: headers);
+        pending = _http.get(uri, headers: headers);
       case 'POST':
-        response = await _http.post(uri, headers: headers, body: encodedBody);
+        pending = _http.post(uri, headers: headers, body: encodedBody);
       case 'PUT':
-        response = await _http.put(uri, headers: headers, body: encodedBody);
+        pending = _http.put(uri, headers: headers, body: encodedBody);
       case 'PATCH':
-        response = await _http.patch(uri, headers: headers, body: encodedBody);
+        pending = _http.patch(uri, headers: headers, body: encodedBody);
       case 'DELETE':
-        response = await _http.delete(uri, headers: headers, body: encodedBody);
+        pending = _http.delete(uri, headers: headers, body: encodedBody);
       default:
         throw ArgumentError('Unsupported method: $method');
     }
+    // An answer within a minute, or a TimeoutException — never a request that waits forever.
+    final response = await pending.timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 204) return null;
 
