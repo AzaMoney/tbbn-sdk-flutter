@@ -182,8 +182,20 @@ class OAuthLinkResource {
   /// Public details of an OAuth client.
   Future<dynamic> getClient(String clientId) => _request('GET', '/v1/link/oauth/clients/$clientId');
 
+  /// Sends the linking request from your server first; the browser then carries only request_uri.
+  Future<dynamic> pushRequest(String clientId, String clientSecret, String redirectUri, String codeChallenge, {String? merchantSellerRef}) =>
+      _request('POST', '/v1/link/oauth/par', body: {
+        'client_id': clientId,
+        'client_secret': clientSecret,
+        'redirect_uri': redirectUri,
+        'scope': 'link:seller',
+        'code_challenge': codeChallenge,
+        'code_challenge_method': 'S256',
+        if (merchantSellerRef != null) 'merchant_seller_ref': merchantSellerRef,
+      });
+
   /// Exchanges an authorization code for a seller link.
-  Future<dynamic> token(String code, String clientId, String clientSecret, String redirectUri, {String? codeVerifier}) =>
+  Future<dynamic> token(String code, String clientId, String clientSecret, String redirectUri, {String? codeVerifier, String? merchantSellerRef}) =>
       _request('POST', '/v1/link/oauth/token', body: {
         'grant_type': 'authorization_code',
         'code': code,
@@ -191,6 +203,7 @@ class OAuthLinkResource {
         'client_secret': clientSecret,
         'redirect_uri': redirectUri,
         if (codeVerifier != null) 'code_verifier': codeVerifier,
+        if (merchantSellerRef != null) 'merchant_seller_ref': merchantSellerRef,
       });
 }
 

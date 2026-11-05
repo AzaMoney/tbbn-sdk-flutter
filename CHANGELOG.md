@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `oauthLink.pushRequest`. `oauthLink.token` takes `merchantSellerRef`, required when you put it on the authorize link.
+
 ## 0.4.0 — 2026-10-24
 
 - Fixed: `listings.getWants(id)` requested `GET /merchant/listings/{id}/wants`, which doesn't exist, so it always failed with 404. It now reads `GET /v1/listings/{id}/wants`.
