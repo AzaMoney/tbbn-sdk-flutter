@@ -22,7 +22,7 @@ dependencies:
 ```dart
 import 'package:tbbn_sdk/tbbn_sdk.dart';
 
-final client = TbbnClient(baseUrl: 'https://api.tbbnetwork.com', apiKey: 'sk_sandbox_...');
+final client = TbbnClient(baseUrl: 'https://api.tbbnetwork.com', apiKey: 'tbbn_sk_sandbox_...');
 
 final listing = await client.listings.upsert({
   'merchantId': '...',
@@ -48,7 +48,7 @@ Responses are decoded JSON (`Map` / `List`). A complete runnable walkthrough is 
 Pass either an **API key** (`apiKey`, issued to your merchant at
 [merchants.tbbnetwork.com](https://merchants.tbbnetwork.com)) or a **session token**
 (`accessToken`, obtained through one of the `auth` sign-in flows). Sandbox keys
-(`sk_sandbox_…`) work against the same API and never touch live data.
+(`tbbn_sk_sandbox_…`) work against the same API and never touch live data.
 
 ## Webhooks
 

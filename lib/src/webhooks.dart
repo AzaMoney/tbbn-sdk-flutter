@@ -9,26 +9,28 @@ const _replayWindowSeconds = 5 * 60;
 /// of `"<t>.<rawBody>"` under your subscription's signing secret. Deliveries older than five
 /// minutes are rejected to defeat replay. Pass [rawBody] exactly as received — re-serialising
 /// the JSON changes the bytes and the signature will not match. [now] (seconds since the epoch)
-/// is only needed for testing.
+/// is only needed for testing. For a day after a secret is rotated the header carries a `v1` for
+/// each secret; matching any one is enough.
 bool verifyWebhookSignature(String rawBody, String signatureHeader, String signingSecret, {int? now}) {
   now ??= DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-  final parts = <String, String>{};
+  String? timestampStr;
+  final signatures = <String>[];
   for (final pair in signatureHeader.split(',')) {
     final kv = pair.split('=');
-    if (kv.length == 2) parts[kv[0]] = kv[1];
+    if (kv.length != 2) continue;
+    if (kv[0] == 't') timestampStr = kv[1];
+    if (kv[0] == 'v1') signatures.add(kv[1]);
   }
 
-  final timestampStr = parts['t'];
-  final signature = parts['v1'];
-  if (timestampStr == null || signature == null) return false;
+  if (timestampStr == null || signatures.isEmpty) return false;
 
   final timestamp = int.tryParse(timestampStr);
   if (timestamp == null) return false;
   if ((now - timestamp).abs() > _replayWindowSeconds) return false;
 
   final expected = Hmac(sha256, utf8.encode(signingSecret)).convert(utf8.encode('$timestamp.$rawBody')).toString();
-  return _constantTimeEquals(expected, signature);
+  return signatures.any((signature) => _constantTimeEquals(expected, signature));
 }
 
 bool _constantTimeEquals(String a, String b) {

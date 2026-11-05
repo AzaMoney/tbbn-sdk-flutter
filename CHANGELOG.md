@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Webhook verification accepts a header with several `v1` signatures: for a day after a signing secret is rotated, a delivery is signed with both. Update before you rotate one.
+- New API keys start `tbbn_sk_` (`tbbn_sk_live_…`, `tbbn_sk_sandbox_…`); older keys keep working.
 - Added `oauthLink.pushRequest`. `oauthLink.token` takes `merchantSellerRef`, required when you put it on the authorize link.
 
 ## 0.4.0 — 2026-10-24

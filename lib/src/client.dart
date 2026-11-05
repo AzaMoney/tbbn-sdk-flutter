@@ -64,11 +64,11 @@ typedef RequestFn = Future<dynamic> Function(
 
 /// Client for the TBBN Platform API.
 ///
-/// Construct it once with either a merchant API key (`sk_live_…` / `sk_sandbox_…`) or a
+/// Construct it once with either a merchant API key (`tbbn_sk_live_…` / `tbbn_sk_sandbox_…`) or a
 /// session access token, then call methods on the resource groups it exposes:
 ///
 /// ```dart
-/// final client = TbbnClient(baseUrl: 'https://api.tbbnetwork.com', apiKey: 'sk_sandbox_...');
+/// final client = TbbnClient(baseUrl: 'https://api.tbbnetwork.com', apiKey: 'tbbn_sk_sandbox_...');
 /// final listing = await client.listings.upsert({...});
 /// ```
 ///

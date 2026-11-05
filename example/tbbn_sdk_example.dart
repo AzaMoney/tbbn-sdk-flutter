@@ -1,7 +1,7 @@
 // A minimal end-to-end walkthrough: publish a listing, look at incoming offers, and verify a
 // webhook delivery. Run against the sandbox with a sandbox key:
 //
-//   TBBN_API_KEY=sk_sandbox_... TBBN_MERCHANT_ID=... TBBN_SELLER_ID=... \
+//   TBBN_API_KEY=tbbn_sk_sandbox_... TBBN_MERCHANT_ID=... TBBN_SELLER_ID=... \
 //     dart run example/tbbn_sdk_example.dart
 import 'dart:io';
 
@@ -10,7 +10,7 @@ import 'package:tbbn_sdk/tbbn_sdk.dart';
 Future<void> main() async {
   final apiKey = Platform.environment['TBBN_API_KEY'];
   if (apiKey == null) {
-    stderr.writeln('Set TBBN_API_KEY to a sandbox key (sk_sandbox_...) first.');
+    stderr.writeln('Set TBBN_API_KEY to a sandbox key (tbbn_sk_sandbox_...) first.');
     exit(1);
   }
 
