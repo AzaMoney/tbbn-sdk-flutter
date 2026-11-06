@@ -234,3 +234,95 @@ class StatusResource {
   /// Status of every product area (public, no credential needed).
   Future<dynamic> get() => _request('GET', '/v1/status');
 }
+
+/// A Business's locations, for a chain's own systems, with a Space API key.
+class LocationsResource {
+  final RequestFn _request;
+
+  /// Creates the resource; you normally reach it as `client.locations`.
+  LocationsResource(this._request);
+
+  /// Lists the locations the key can see.
+  Future<dynamic> list() =>
+      _request('GET', '/v1/locations');
+
+  /// Creates or updates up to 500 locations by your own store number.
+  Future<dynamic> importBatch(Map<String, dynamic> input) =>
+      _request('POST', '/v1/locations/batch', body: input);
+
+  /// Reads one location.
+  Future<dynamic> get(String id) =>
+      _request('GET', '/v1/locations/$id');
+
+  /// Changes a location.
+  Future<dynamic> update(String id, Map<String, dynamic> input) =>
+      _request('PATCH', '/v1/locations/$id', body: input);
+
+  /// Opens, pauses or closes a location.
+  Future<dynamic> setStatus(String id, Map<String, dynamic> input) =>
+      _request('PATCH', '/v1/locations/$id/status', body: input);
+
+  /// Makes a ten-minute token for one register.
+  Future<dynamic> createConnectionToken(String id, Map<String, dynamic> input) =>
+      _request('POST', '/v1/locations/$id/connection_tokens', body: input);
+}
+
+/// Credit a store gives for a trade-in and spends on its own till. TBBN only keeps the record.
+class TradeCreditsResource {
+  final RequestFn _request;
+
+  /// Creates the resource; you normally reach it as `client.tradeCredits`.
+  TradeCreditsResource(this._request);
+
+  /// Gives credit.
+  Future<dynamic> issue(Map<String, dynamic> input) =>
+      _request('POST', '/v1/trade_credits', body: input);
+
+  /// Lists your credit, newest first.
+  Future<dynamic> list() =>
+      _request('GET', '/v1/trade_credits');
+
+  /// Reads one credit.
+  Future<dynamic> get(String id) =>
+      _request('GET', '/v1/trade_credits/$id');
+
+  /// Records it spent on your till order.
+  Future<dynamic> redeem(String id, Map<String, dynamic> input) =>
+      _request('POST', '/v1/trade_credits/$id/redeem', body: input);
+
+  /// Cancels unspent credit.
+  Future<dynamic> cancel(String id) =>
+      _request('POST', '/v1/trade_credits/$id/void');
+}
+
+/// An item accepted at the counter becomes your listing at that location.
+class TradeInsResource {
+  final RequestFn _request;
+
+  /// Creates the resource; you normally reach it as `client.tradeIns`.
+  TradeInsResource(this._request);
+
+  /// Records an item taken in.
+  Future<dynamic> accept(Map<String, dynamic> input) =>
+      _request('POST', '/v1/trade_ins', body: input);
+}
+
+/// "Connect to TBBN" for a software vendor's server, with its client secret.
+class PlatformOAuthResource {
+  final RequestFn _request;
+
+  /// Creates the resource; you normally reach it as `client.platformOAuth`.
+  PlatformOAuthResource(this._request);
+
+  /// Sends a connection request.
+  Future<dynamic> pushRequest(Map<String, dynamic> input) =>
+      _request('POST', '/v1/platform-oauth/par', body: input);
+
+  /// Gets or refreshes tokens.
+  Future<dynamic> token(Map<String, dynamic> input) =>
+      _request('POST', '/v1/platform-oauth/token', body: input);
+
+  /// Ends the connection.
+  Future<dynamic> revoke(Map<String, dynamic> input) =>
+      _request('POST', '/v1/platform-oauth/revoke', body: input);
+}

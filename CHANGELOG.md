@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added `platformOAuth`: "Connect to TBBN" for a software vendor's server, with its client secret.
+- Added `tradeIns`: An item accepted at the counter becomes your listing at that location.
+- Added `tradeCredits`: Credit a store gives for a trade-in and spends on its own till. TBBN only keeps the record.
+- Added `locations`: A Business's locations, for a chain's own systems, with a Space API key.
 - Webhook verification accepts a header with several `v1` signatures: for a day after a signing secret is rotated, a delivery is signed with both. Update before you rotate one.
 - New API keys start `tbbn_sk_` (`tbbn_sk_live_…`, `tbbn_sk_sandbox_…`); older keys keep working.
 - Added `oauthLink.pushRequest`. `oauthLink.token` takes `merchantSellerRef`, required when you put it on the authorize link.

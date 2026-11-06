@@ -110,6 +110,18 @@ class TbbnClient {
   /// A Business's locations.
   late final BranchesResource branches;
 
+  /// "Connect to TBBN" for a software vendor's server, with its client secret.
+  late final PlatformOAuthResource platformOAuth;
+
+  /// An item accepted at the counter becomes your listing at that location.
+  late final TradeInsResource tradeIns;
+
+  /// Credit a store gives for a trade-in and spends on its own till. TBBN only keeps the record.
+  late final TradeCreditsResource tradeCredits;
+
+  /// A Business's locations, for a chain's own systems, with a Space API key.
+  late final LocationsResource locations;
+
   /// Links between a Business and the Merchants it runs.
   late final BusinessMerchantLinksResource businessMerchantLinks;
 
@@ -204,6 +216,10 @@ class TbbnClient {
     sellers = SellersResource(_request);
     businesses = BusinessesResource(_request);
     branches = BranchesResource(_request);
+    platformOAuth = PlatformOAuthResource(_request);
+    tradeIns = TradeInsResource(_request);
+    tradeCredits = TradeCreditsResource(_request);
+    locations = LocationsResource(_request);
     businessMerchantLinks = BusinessMerchantLinksResource(_request);
     space = SpaceResource(_request);
     listings = ListingsResource(_request);
