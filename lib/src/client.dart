@@ -110,6 +110,9 @@ class TbbnClient {
   /// A Business's locations.
   late final BranchesResource branches;
 
+  /// What people wrote, in another language. Public.
+  late final TranslationsResource translations;
+
   /// "Connect to TBBN" for a software vendor's server, with its client secret.
   late final PlatformOAuthResource platformOAuth;
 
@@ -216,6 +219,7 @@ class TbbnClient {
     sellers = SellersResource(_request);
     businesses = BusinessesResource(_request);
     branches = BranchesResource(_request);
+    translations = TranslationsResource(_request);
     platformOAuth = PlatformOAuthResource(_request);
     tradeIns = TradeInsResource(_request);
     tradeCredits = TradeCreditsResource(_request);

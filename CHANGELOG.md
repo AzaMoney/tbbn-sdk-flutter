@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `translations`: What people wrote, in another language. Public.
 - Added `platformOAuth`: "Connect to TBBN" for a software vendor's server, with its client secret.
 - Added `tradeIns`: An item accepted at the counter becomes your listing at that location.
 - Added `tradeCredits`: Credit a store gives for a trade-in and spends on its own till. TBBN only keeps the record.

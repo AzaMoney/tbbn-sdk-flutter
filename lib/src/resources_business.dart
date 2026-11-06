@@ -326,3 +326,23 @@ class PlatformOAuthResource {
   Future<dynamic> revoke(Map<String, dynamic> input) =>
       _request('POST', '/v1/platform-oauth/revoke', body: input);
 }
+
+/// What people wrote, in another language. Public.
+class TranslationsResource {
+  final RequestFn _request;
+
+  /// Creates the resource; you normally reach it as `client.translations`.
+  TranslationsResource(this._request);
+
+  /// Whether translation is on.
+  Future<dynamic> available() =>
+      _request('GET', '/v1/directory/translations/available');
+
+  /// A public listing's title and note.
+  Future<dynamic> listing(String id, String lang) =>
+      _request('GET', '/v1/directory/translations/listings/$id?lang=$lang');
+
+  /// A public storefront's bio.
+  Future<dynamic> storeBio(String slug, String lang) =>
+      _request('GET', '/v1/directory/translations/storefronts/$slug?lang=$lang');
+}
